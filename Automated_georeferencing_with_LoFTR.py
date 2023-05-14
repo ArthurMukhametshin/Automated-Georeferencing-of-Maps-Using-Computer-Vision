@@ -104,7 +104,7 @@ st = time.time()
 with torch.inference_mode():
     correspondences = matcher(input_dict)
     mkpts1 = correspondences['keypoints0'].cpu().numpy()
-mkpts2 = correspondences['keypoints1'].cpu().numpy()
+    mkpts2 = correspondences['keypoints1'].cpu().numpy()
 
 et = time.time()
 print ('Время сопоставления точек: ', round(et-st, 2), ' с')

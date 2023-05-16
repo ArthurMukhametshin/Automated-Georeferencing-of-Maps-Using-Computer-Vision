@@ -11,9 +11,9 @@ import matplotlib.pyplot as plt
 from kornia_moons.feature import *
 
 # ИСХОДНЫЕ ПАРАМЕТРЫ
-path_georef = 'Data/yandex_2gis_moscow/yandex_msc_gr.tif' # Путь к привязанной карте
-path_notgeoref = 'Data/yandex_2gis_moscow/2gis_msc.tif' # Путь к непривязанной карте
-save_path = 'Data/yandex_2gis_moscow/2gis_msc_gr.tif' # Путь для сохранения привязанной карты
+path_georef = '' # Путь к привязанной карте
+path_notgeoref = '' # Путь к непривязанной карте
+save_path = '' # Путь для сохранения привязанной карты
 n_clusters = 0 # Число кластеров для сегментации карт (в случае ненадобности ввести значение 0)
 tr_type = 'aff' # Тип трансформации: aff, poly2, poly3, spline
 

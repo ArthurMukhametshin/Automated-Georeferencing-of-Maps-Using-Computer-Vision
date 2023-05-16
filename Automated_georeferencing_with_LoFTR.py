@@ -11,13 +11,13 @@ import matplotlib.pyplot as plt
 from kornia_moons.feature import *
 
 # ИСХОДНЫЕ ПАРАМЕТРЫ
-path_georef = '' # Путь к привязанной карте
-path_notgeoref = '' # Путь к непривязанной карте
-save_path = '' # Путь для сохранения привязанной карты
-n_clusters = 0 # Число кластеров для сегментации карт (в случае ненадобности ввести значение 0)
+path_georef = '' # Путь к привязанному геоизображению
+path_notgeoref = '' # Путь к непривязанному геоизображению
+save_path = '' # Путь для сохранения привязанного геоизображения
+n_clusters = 0 # Число кластеров для сегментации геоизображений (в случае ненадобности ввести значение 0)
 tr_type = 'aff' # Тип трансформации: aff, poly2, poly3, spline
 
-# ФУНКЦИЯ ДЛЯ КЛАСТЕРИЗАЦИИ КАРТ
+# ФУНКЦИЯ ДЛЯ КЛАСТЕРИЗАЦИИ ГЕОИЗОБРАЖЕНИЙ
 def clustering (path1, path2, k_value):
     paths = [path1, path2]
     global cl_img_gr, cl_img
@@ -51,7 +51,7 @@ st = time.time()
 if n_clusters > 0:
     clustering(path_georef, path_notgeoref, n_clusters)
 
-    # ФУНКЦИЯ ДЛЯ ЗАГРУЗКИ И ПРЕОБРАЗОВАНИЯ КАРТ В ТЕНЗОРЫ
+    # ФУНКЦИЯ ДЛЯ ЗАГРУЗКИ И ПРЕОБРАЗОВАНИЯ ГЕОИЗОБРАЖЕНИЙ В ТЕНЗОРЫ
     def load_torch_image(image):
         img = kornia.image_to_tensor(image, False).float() / 255.
         img = kornia.color.bgr_to_rgb(img)
@@ -63,7 +63,7 @@ if n_clusters > 0:
 
 elif n_clusters == 0:
 
-    # ФУНКЦИЯ ДЛЯ ЗАГРУЗКИ И ПРЕОБРАЗОВАНИЯ КАРТ В ТЕНЗОРЫ
+    # ФУНКЦИЯ ДЛЯ ЗАГРУЗКИ И ПРЕОБРАЗОВАНИЯ ГЕОИЗОБРАЖЕНИЙ В ТЕНЗОРЫ
     def load_torch_image(image):
         img = kornia.image_to_tensor(cv.imread(image), False).float() / 255.
         img = kornia.color.bgr_to_rgb(img)
@@ -79,14 +79,14 @@ else:
 et = time.time()
 print ('Время выполнения кластеризации: ', round(et-st, 2), ' с')
 
-# ПРЕОБРАЗОВАНИЕ КАРТ В ТЕНЗОРЫ
+# ПРЕОБРАЗОВАНИЕ ГЕОИЗОБРАЖЕНИЙ В ТЕНЗОРЫ
 st = time.time()
 
 img1 = load_torch_image(x)
 img2 = load_torch_image(y)
 
 et = time.time()
-print ('Время преобразования карт в тензоры: ', round(et-st, 2), ' с')
+print ('Время преобразования геоизображений в тензоры: ', round(et-st, 2), ' с')
 
 # ОБНАРУЖЕНИЕ ТОЧЕК
 st = time.time()
@@ -119,7 +119,7 @@ Fm, inliers = cv.findFundamentalMat(mkpts1,
                                     confidence=0.999,
                                     maxIters=100000)
 inliers = inliers > 0
-print('Выделено соответственных точек: ', len(inliers))
+print('Выделено ключевых точек точек: ', len(inliers))
 
 et = time.time()
 print ('Время уточнения точек до субпиксельного уровня: ', round(et-st, 2), ' с')
@@ -182,7 +182,7 @@ for kp in list_kp1:
 et = time.time()
 print ('Время получения географических координат точек: ', round(et-st, 2), ' с')
 
-# ОКОНЧАТЕЛЬНАЯ ПРИВЯЗКА КАРТЫ
+# ОКОНЧАТЕЛЬНАЯ ПРИВЯЗКА ГЕОИЗОБРАЖЕНИЯ
 st = time.time()
 
 img = gdal.Open(path_notgeoref, gdal.GA_Update)
@@ -213,7 +213,7 @@ elif tr_type == 'spline':
                                                        tps=True))
 
 et = time.time()
-print ('Время привязки карты: ', round(et-st, 2), ' с')
+print ('Время привязки геоизображения: ', round(et-st, 2), ' с')
 
 # ОЦЕНКА ТОЧНОСТИ ПРИВЯЗКИ
 path_gcp = os.path.dirname(save_path) + '/' + 'GCP.points'

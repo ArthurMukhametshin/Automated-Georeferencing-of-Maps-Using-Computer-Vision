@@ -9,12 +9,12 @@ This repository contains a script for automated georeferencing of geoimages - **
   
 Each of the scripts contains not only a block related to a specific model, but also additional tools to possibly increase the efficiency of searching for the corresponding points.
 
-To implement the automated georeferencing model, one universal program code was written and stored in a PY file - Automated_georeferencing_with_LoFTR.py. Separate blocks of code presented in the file carry out successive stages of processing the source data. Explanations of the actions of the blocks are given in the comments to each of them.
+To implement the automated georeferencing model, one universal program code was written and stored in a PY file - **Automated_georeferencing_with_LoFTR.py**. Separate blocks of code presented in the file carry out successive stages of processing the source data. Explanations of the actions of the blocks are given in the comments to each of them.
 
-**Importing Software Libraries.**
+**Importing Libraries.**
 At the beginning of the script, libraries are imported (os, sys, time, torch, kornia, OpenCV, numpy, gdal, osr, matplotlib, kornia_moons), which will later be used to call the necessary functions. They will be described in more detail in the next paragraph on software libraries and their role in the script.
 
-**Specifying Options.**
+**Specifying Parameters.**
 This is followed by a block for specifying the main parameters, including: paths to linked and non-linked geoimages, the path to save the resulting linked geoimage, the number of clusters for segmentation (clustering will not be performed if the value is 0) and the type of raster transformation (affine, polynomial second and third degrees, thin-walled spline). These types were chosen due to the fact that they are presented in the parameters of the Warp function, which performs image transformation.
 
 **Function for clustering geoimages.**
@@ -38,7 +38,7 @@ Upon reaching an acceptable result, the procedure for extracting the pixel coord
 **Getting geographic coordinates of points.**
 Then the received pixel coordinates are converted into geographic ones. To do this, using the gdal library, the attached geo-image is read and its transformation parameters are read, from which the coordinates of the upper left corner of the image and the spatial resolution are extracted. Next, geographic coordinates are calculated and added to the list, where reference points are created using the GCP function for binding (the following are specified in sequence: geographic coordinate x, geographic coordinate y, pixel coordinate x, pixel coordinate y). Thus, a one-to-one correspondence is established between the pixel coordinates of the unattached image and the geographic coordinates obtained from the attached image.
 
-**Final geoimage binding.**
+**Final georeferencing.**
 Then comes the geoimage binding block. Here, using gdal, the unattached image is read, the parameters of the coordinate system (CS) or the projection of the attached image are obtained, and its EPSG code is read. Further, using the SetGCPs function, where the list of control points and parameters of the GC of the linked raster are specified, the previously unlinked map is bound. After that, using the Warp function, the attached geo-image is transformed in accordance with the previously selected type of transformation.
 
 **Anchor Accuracy Assessment.**
@@ -47,6 +47,7 @@ At the last stage, a file with the POINTS extension is generated, which is used 
 After completing the binding procedure, this file can be loaded into the QGIS georeferencing module to estimate the residual value both in general and at individual points, in order to then make a more detailed assessment of the transformation accuracy.
 
 **Examples of the result of the model:**
+
 ![image](https://github.com/ArthurMukhametshin/Automated-Georeferencing-of-Maps-Using-Computer-Vision/assets/104223492/6e2149d7-6fc5-4a48-969c-8497ff669a74)
 ![image](https://github.com/ArthurMukhametshin/Automated-Georeferencing-of-Maps-Using-Computer-Vision/assets/104223492/aeb27b78-438a-4d5f-973f-8c319d8ee756)
 

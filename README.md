@@ -1,8 +1,12 @@
 # Automated-Georeferencing-of-Maps-Using-Computer-Vision
 This repository contains a script for automated georeferencing of geoimages - **Automated_georeferencing_with_LoFTR.py**. There are also 3 scripts in which the possibility of using other algorithms for finding corresponding points was tested:
+
   **SIFT.py** - script for finding corresponding points on two geoimages using the SIFT algorithm.
+  
   **SURF.py** - script for finding corresponding points on two geoimages using the SURF algorithm.
+  
   **ORB.py** - script for finding corresponding points on two geoimages using the ORB algorithm.
+  
 Each of the scripts contains not only a block related to a specific model, but also additional tools to possibly increase the efficiency of searching for the corresponding points.
 
 To implement the automated georeferencing model, one universal program code was written and stored in a PY file - Automated_georeferencing_with_LoFTR.py. Separate blocks of code presented in the file carry out successive stages of processing the source data. Explanations of the actions of the blocks are given in the comments to each of them.
